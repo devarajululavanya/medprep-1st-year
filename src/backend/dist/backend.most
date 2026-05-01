@@ -1,0 +1,180 @@
+// Version: 1.0.0
+type CaseId__886013863 = Id__389469852;
+type CaseQuestion__354337358 = {modelAnswer : Text; text : Text};
+type CaseSubmission__523489174 =
+  {
+    caseId : CaseId__886013863;
+    questionIndex : Nat;
+    submittedAt : Timestamp__301639476;
+    userAnswer : Text
+  };
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type DifficultyLevel__1035736694 = {#easy; #hard; #medium};
+type EceCase__503399206 =
+  {
+    difficulty : DifficultyLevel__1035736694;
+    id : CaseId__886013863;
+    learningPoints : [Text];
+    presentation : Text;
+    questions : [CaseQuestion__354337358];
+    subjectTags : [SubjectId__857601802];
+    title : Text
+  };
+type FlashcardId__433800643 = Id__389469852;
+type FlashcardProgress__567335265 =
+  {
+    dueDate : Timestamp__301639476;
+    easeFactor : Float;
+    flashcardId : FlashcardId__433800643;
+    intervalDays : Nat;
+    reviewCount : Nat;
+    status : FlashcardStatus__744165911
+  };
+type FlashcardStatus__744165911 = {#learning; #mastered; #new_};
+type Flashcard__859620550 =
+  {
+    back : Text;
+    front : Text;
+    id : FlashcardId__433800643;
+    topicId : TopicId__1810226
+  };
+type Id__389469852 = Nat;
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type List__415060402<T> = List__790383201<T>;
+type List__790383201<T> =
+  {
+    var blockIndex : Nat__490723111;
+    var blocks : [var [var ?T]];
+    var elementIndex : Nat__490723111
+  };
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type QuestionId__248447749 = Id__389469852;
+type Question__290945081 =
+  {
+    correctIndex : Nat;
+    explanation : Text;
+    id : QuestionId__248447749;
+    isFlagged : Bool;
+    options : [Text];
+    source : {#aiGenerated; #manual};
+    text : Text;
+    topicId : TopicId__1810226
+  };
+type QuizAttempt__143628499 =
+  {
+    answers : [Nat];
+    completedAt : Timestamp__301639476;
+    quizId : QuizId__775050758;
+    score : Nat;
+    totalQuestions : Nat
+  };
+type QuizId__775050758 = Id__389469852;
+type QuizStatus__105840563 = {#active; #completed};
+type Quiz__109335985 =
+  {
+    createdAt : Timestamp__301639476;
+    id : QuizId__775050758;
+    questionIds : [QuestionId__248447749];
+    status : QuizStatus__105840563;
+    topicId : TopicId__1810226
+  };
+type SubjectId__857601802 = Id__389469852;
+type SubjectName__197835645 = {#anatomy; #biochemistry; #physiology};
+type Subject__826378324 =
+  {
+    description : Text;
+    id : SubjectId__857601802;
+    name : SubjectName__197835645;
+    topicCount : Nat
+  };
+type Timestamp__301639476 = Int;
+type TopicId__1810226 = Id__389469852;
+type Topic__827478228 =
+  {
+    description : Text;
+    id : TopicId__1810226;
+    orderIndex : Nat;
+    subjectId : SubjectId__857601802;
+    title : Text
+  };
+type UserProgressState__38062877 =
+  {
+    var flashcardsReviewed : Nat;
+    var lastStudyDate : ?Timestamp__301639476;
+    var quizzesTaken : Nat;
+    var streakDays : Nat;
+    subjectMinutes : Map__605269027<SubjectId__857601802, Nat>;
+    var totalStudyMinutes : Nat
+  };
+actor {
+  stable caseSubmissions :
+    {
+      var root :
+        Node__46230540<Principal, List__415060402<CaseSubmission__523489174>>;
+      var size : Nat__490723111
+    };
+  stable eceCases :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?EceCase__503399206]];
+      var elementIndex : Nat__490723111
+    };
+  stable flashcardProgress :
+    {
+      var root :
+        Node__46230540<Principal,
+                        List__415060402<FlashcardProgress__567335265>>;
+      var size : Nat__490723111
+    };
+  stable flashcards :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Flashcard__859620550]];
+      var elementIndex : Nat__490723111
+    };
+  stable questions :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Question__290945081]];
+      var elementIndex : Nat__490723111
+    };
+  stable quizAttempts :
+    {
+      var root :
+        Node__46230540<Principal, List__415060402<QuizAttempt__143628499>>;
+      var size : Nat__490723111
+    };
+  stable quizzes :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Quiz__109335985]];
+      var elementIndex : Nat__490723111
+    };
+  stable subjects :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Subject__826378324]];
+      var elementIndex : Nat__490723111
+    };
+  stable topics :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Topic__827478228]];
+      var elementIndex : Nat__490723111
+    };
+  stable userProgressMap :
+    {
+      var root : Node__46230540<Principal, UserProgressState__38062877>;
+      var size : Nat__490723111
+    }
+};

@@ -1,0 +1,166 @@
+type http_request_result = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type http_header = 
+ record {
+   name: text;
+   value: text;
+ };
+type UserProgress = 
+ record {
+   lastStudyDate: opt Timestamp;
+   streakDays: nat;
+   subjectProgress: vec SubjectProgress;
+   totalStudyMinutes: nat;
+ };
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: http_request_result;
+ };
+type TopicId = nat;
+type Topic = 
+ record {
+   description: text;
+   id: TopicId;
+   orderIndex: nat;
+   subjectId: SubjectId;
+   title: text;
+ };
+type Timestamp = int;
+type SubjectProgress = 
+ record {
+   flashcardsReviewed: nat;
+   masteryPercent: float64;
+   quizzesTaken: nat;
+   subjectId: SubjectId;
+   topicsStudied: nat;
+   totalStudyMinutes: nat;
+ };
+type SubjectName = 
+ variant {
+   anatomy;
+   biochemistry;
+   physiology;
+ };
+type SubjectId = nat;
+type Subject = 
+ record {
+   description: text;
+   id: SubjectId;
+   name: SubjectName;
+   topicCount: nat;
+ };
+type ReviewRating = 
+ variant {
+   easy;
+   good;
+   hard;
+ };
+type QuizStatus = 
+ variant {
+   active;
+   completed;
+ };
+type QuizResult = 
+ record {
+   completedAt: Timestamp;
+   correctAnswers: vec bool;
+   percentage: float64;
+   quizId: QuizId;
+   score: nat;
+   totalQuestions: nat;
+ };
+type QuizId = nat;
+type QuizAttempt = 
+ record {
+   answers: vec nat;
+   completedAt: Timestamp;
+   quizId: QuizId;
+   score: nat;
+   totalQuestions: nat;
+ };
+type Quiz = 
+ record {
+   createdAt: Timestamp;
+   id: QuizId;
+   questionIds: vec QuestionId;
+   status: QuizStatus;
+   topicId: TopicId;
+ };
+type QuestionId = nat;
+type Question = 
+ record {
+   correctIndex: nat;
+   explanation: text;
+   id: QuestionId;
+   isFlagged: bool;
+   options: vec text;
+   source: variant {
+             aiGenerated;
+             manual;
+           };
+   "text": text;
+   topicId: TopicId;
+ };
+type FlashcardId = nat;
+type Flashcard = 
+ record {
+   back: text;
+   front: text;
+   id: FlashcardId;
+   topicId: TopicId;
+ };
+type EceCase = 
+ record {
+   difficulty: DifficultyLevel;
+   id: CaseId;
+   learningPoints: vec text;
+   presentation: text;
+   questions: vec CaseQuestion;
+   subjectTags: vec SubjectId;
+   title: text;
+ };
+type DifficultyLevel = 
+ variant {
+   easy;
+   hard;
+   medium;
+ };
+type CaseQuestion = 
+ record {
+   modelAnswer: text;
+   "text": text;
+ };
+type CaseId = nat;
+service : {
+  createQuiz: (topicId: TopicId, questionCount: nat) -> (Quiz);
+  generateQuestionsForTopic: (topicId: TopicId) -> (vec Question);
+  getCase: (id: CaseId) -> (opt EceCase) query;
+  getCases: (subjectId: opt SubjectId) -> (vec EceCase) query;
+  getDueFlashcards: () -> (vec Flashcard) query;
+  getFlashcards: (topicId: TopicId) -> (vec Flashcard) query;
+  getQuestion: (id: QuestionId) -> (opt Question) query;
+  getQuestions: (topicId: TopicId) -> (vec Question) query;
+  getQuizHistory: () -> (vec QuizAttempt) query;
+  getQuizResult: (quizId: QuizId) -> (opt QuizResult) query;
+  getSubjects: () -> (vec Subject) query;
+  getTopic: (id: TopicId) -> (opt Topic) query;
+  getTopics: (subjectId: SubjectId) -> (vec Topic) query;
+  getUserProgress: () -> (UserProgress) query;
+  markQuestionFlagged: (questionId: QuestionId) -> ();
+  recordStudySession: (subjectId: SubjectId, durationMinutes: nat) -> ();
+  reviewFlashcard: (cardId: FlashcardId, rating: ReviewRating) -> ();
+  submitCaseAnswer: (caseId: CaseId, questionIndex: nat, answer: text) -> ();
+  submitQuiz: (quizId: QuizId, answers: vec nat) -> (QuizResult);
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+}

@@ -1,0 +1,25 @@
+{
+  "overview": "An AI-powered MBBS 1st Year study companion covering Anatomy, Physiology, and Biochemistry with smart flashcards, AI question banks, topic quizzes, early clinical exposure cases, and progress tracking.",
+  "features": [
+    "Subject & topic navigation for Anatomy, Physiology, Biochemistry",
+    "AI-generated question bank with detailed explanations",
+    "Interactive flashcards with spaced repetition",
+    "Timed topic quizzes with instant scoring",
+    "Early Clinical Exposure case studies",
+    "Progress tracking and study streak counter"
+  ],
+  "category": "education",
+  "tags": [
+    "mbbs",
+    "medical",
+    "education",
+    "anatomy",
+    "physiology",
+    "biochemistry",
+    "flashcards",
+    "quiz",
+    "ai",
+    "clinical"
+  ],
+  "last_updated": "2026-05-01T15:34:31.054Z"
+}
